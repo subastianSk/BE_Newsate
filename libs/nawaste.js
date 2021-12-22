@@ -1,4 +1,9 @@
-const beforeOrAfterErrorHandler = async (ctx, err, res, { action, service, mixins }) => {
+const beforeOrAfterErrorHandler = async (
+  ctx,
+  err,
+  res,
+  { action, service, mixins }
+) => {
   let errorResponse = err;
   let thereIsOnErrorHandler = 0;
 
@@ -26,37 +31,38 @@ const beforeOrAfterErrorHandler = async (ctx, err, res, { action, service, mixin
 
 const middlewareDefault = (req, res, next) => next();
 
-const middlewareBeforeAfter = (services, serviceType, middlewareType) => async (req, res, next) => {
-  const { ctx, response } = res.locals;
-  try {
-    const obj = services[serviceType];
-    if (Array.isArray(obj)) {
-      for (const o of obj) {
-        if (o[middlewareType]) {
-          if (middlewareType === "after") {
-            await o.after(ctx, response);
-          } else {
-            await o.before(ctx);
+const middlewareBeforeAfter =
+  (services, serviceType, middlewareType) => async (req, res, next) => {
+    const { ctx, response } = res.locals;
+    try {
+      const obj = services[serviceType];
+      if (Array.isArray(obj)) {
+        for (const o of obj) {
+          if (o[middlewareType]) {
+            if (middlewareType === "after") {
+              await o.after(ctx, response);
+            } else {
+              await o.before(ctx);
+            }
+            res.locals.ctx = ctx;
+            res.locals.response = ctx.response;
           }
-          res.locals.ctx = ctx;
-          res.locals.response = ctx.response;
         }
+      } else if (obj[middlewareType]) {
+        if (middlewareType === "after") {
+          await obj.after(ctx, response);
+        } else {
+          await obj.before(ctx);
+        }
+        res.locals.ctx = ctx;
+        res.locals.response = ctx.response;
       }
-    } else if (obj[middlewareType]) {
-      if (middlewareType === "after") {
-        await obj.after(ctx, response);
-      } else {
-        await obj.before(ctx);
-      }
-      res.locals.ctx = ctx;
-      res.locals.response = ctx.response;
+      next();
+    } catch (error) {
+      await beforeOrAfterErrorHandler(ctx, error, res, services);
+      return;
     }
-    next();
-  } catch (error) {
-    await beforeOrAfterErrorHandler(ctx, error, res, services);
-    return;
-  }
-};
+  };
 
 const middlewareMain = (types) => async (req, res, next) => {
   const { ctx } = res.locals;
@@ -85,8 +91,26 @@ const buildService = ({ schema: service }) => {
     const action = { name: actionName, ...service.actions[actionName] };
 
     // mixin builder
-    const mixinBefores = service.mixins && Array.isArray(service.mixins) ? service.mixins.map((_) => middlewareBeforeAfter({ action, service, mixins: service.mixins || [] }, "mixins", "before")) : [middlewareDefault];
-    const mixinAfters = service.mixins && Array.isArray(service.mixins) ? service.mixins.map((_) => middlewareBeforeAfter({ action, service, mixins: service.mixins || [] }, "mixins", "after")) : [middlewareDefault];
+    const mixinBefores =
+      service.mixins && Array.isArray(service.mixins)
+        ? service.mixins.map((_) =>
+            middlewareBeforeAfter(
+              { action, service, mixins: service.mixins || [] },
+              "mixins",
+              "before"
+            )
+          )
+        : [middlewareDefault];
+    const mixinAfters =
+      service.mixins && Array.isArray(service.mixins)
+        ? service.mixins.map((_) =>
+            middlewareBeforeAfter(
+              { action, service, mixins: service.mixins || [] },
+              "mixins",
+              "after"
+            )
+          )
+        : [middlewareDefault];
 
     // actions registration
     router[action.method](
@@ -103,7 +127,7 @@ const buildService = ({ schema: service }) => {
             params: req.params,
             body: req.body,
           },
-          headers: req.headers,
+          headers: req.headers
         };
         res.locals.ctx = ctx;
         next();
@@ -120,15 +144,39 @@ const buildService = ({ schema: service }) => {
 
       // BEFORES
       ...mixinBefores,
-      service.before && typeof service.before === "function" ? middlewareBeforeAfter({ action, service, mixins: service.mixins || [] }, "service", "before") : middlewareDefault,
-      action.before && typeof action.before === "function" ? middlewareBeforeAfter({ action, service, mixins: service.mixins || [] }, "action", "before") : middlewareDefault,
+      service.before && typeof service.before === "function"
+        ? middlewareBeforeAfter(
+            { action, service, mixins: service.mixins || [] },
+            "service",
+            "before"
+          )
+        : middlewareDefault,
+      action.before && typeof action.before === "function"
+        ? middlewareBeforeAfter(
+            { action, service, mixins: service.mixins || [] },
+            "action",
+            "before"
+          )
+        : middlewareDefault,
 
       // == MAIN ==
       middlewareMain({ action, service, mixins: service.mixins || [] }),
 
       // AFTERS
-      action.after && typeof action.after === "function" ? middlewareBeforeAfter({ action, service, mixins: service.mixins || [] }, "action", "after") : middlewareDefault,
-      service.after && typeof service.after === "function" ? middlewareBeforeAfter({ action, service, mixins: service.mixins || [] }, "service", "after") : middlewareDefault,
+      action.after && typeof action.after === "function"
+        ? middlewareBeforeAfter(
+            { action, service, mixins: service.mixins || [] },
+            "action",
+            "after"
+          )
+        : middlewareDefault,
+      service.after && typeof service.after === "function"
+        ? middlewareBeforeAfter(
+            { action, service, mixins: service.mixins || [] },
+            "service",
+            "after"
+          )
+        : middlewareDefault,
       ...mixinAfters,
 
       // DONE
@@ -146,5 +194,5 @@ module.exports = {
   middlewareBeforeAfter,
   middlewareMain,
   middlewareAuth,
-  buildService,
+  buildService
 };

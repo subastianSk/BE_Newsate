@@ -3,10 +3,16 @@ require("dotenv").config();
 const express = require("express");
 const { sequelize } = require("./models");
 
+const participantService = require('./domains/participants').service;
+const userService = require('./domains/users').service;
+
 const app = express();
 const PORT = Number(process.env.APP_PORT) || 8080;
 
 app.use(express.json());
+
+app.use('/participants', participantService);
+app.use('/users', userService);
 
 // db connect
 sequelize
