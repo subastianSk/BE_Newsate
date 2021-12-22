@@ -2,22 +2,8 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    queryInterface.createTable('users_roles', {
-      adminId: {
-        type: Sequelize.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-      },
-      createdAt: {
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        type: Sequelize.DATE
-      }
-    })
-    // Order belongsTo Customer
     return queryInterface.addColumn(
-      'users_roles', //Nama Tabel Tujuan yang mau di tambahkan
+      'user_roles', //Nama Tabel Tujuan yang mau di tambahkan
       'roleId', //Nama Kolom yang mau ditambahkan
       {
         type: Sequelize.INTEGER,
@@ -27,6 +13,18 @@ module.exports = {
         },
         allowNull: false,
         foreignKey: true
+      },{
+        adminId: {
+            type: Sequelize.INTEGER,
+            primaryKey: true,
+            autoIncrement: true
+          },
+          createdAt: {
+            type: Sequelize.DATE
+          },
+          updatedAt: {
+            type: Sequelize.DATE
+          }
       })
   },
 
