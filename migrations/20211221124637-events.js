@@ -16,9 +16,14 @@ module.exports = {
       date: {
         type: Sequelize.DATE
       },
-      createBy: {
+      createdBy: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        references: {
+          model: 'users',
+          key: 'id'
+        },
+        allowNull: false,
+        foreignKey: true
       },
       createdAt: {
         allowNull: false,
