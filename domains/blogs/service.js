@@ -44,7 +44,7 @@ module.exports = {
             },
         },
         updateById: {
-            responseMessage: "update success data Blogs",
+            responseMessage: "success update data Blogs",
             method: "put",
             path: "/:id",
             authentication: true,
@@ -62,7 +62,7 @@ module.exports = {
             },
         },
         deleteById: {
-            responseMessage: "delete success data Blogs",
+            responseMessage: "success update data Blogs",
             method: "delete",
             path: "/:id",
             authentication: true,
