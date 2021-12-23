@@ -55,17 +55,39 @@ module.exports = {
         return result;
       },
     },
-    getById: {
-      responseMessage: "success get data Pet",
-      resultName: "hewanFilter",
+    getPointsByParticipant: {
       method: "get",
-      path: "/:id",
-      handler: (ctx) => {
-        const hewan = repositoryHewan.getById(Number(ctx.payload.params.id));
-        if (!hewan) {
-          throw new Error("id not exist");
+      path: "/:id/point",
+      responseMessage: "success getAllPoint participant",
+      handler: async (ctx) => {
+        const participantId = Number(ctx.payload.params.id);
+        // check if participantId exist
+        const isParticipantIdExist = await repository.getById(participantId);
+        if (!isParticipantIdExist) {
+          throw new Error(`participant with id ${participantId} doesn't exist`);
         }
-        return [hewan];
+
+        const result = repository.getParticipantTotalPoints(participantId);
+        return result;
+      },
+    },
+    geteEventPointParticipant: {
+      method: "get",
+      path: "/:id/point/event/:event/",
+      responseMessage: "success getEventPoint participant",
+      handler: async (ctx) => {
+        const participantId = Number(ctx.payload.params.id);
+        // check if participantId exist
+        const isParticipantIdExist = await repository.getById(participantId);
+        if (!isParticipantIdExist) {
+          throw new Error(`participant with id ${participantId} doesn't exist`);
+        }
+
+        // check if participant join this event
+        const eventId = Number(ctx.payload.params.event);
+
+        const result = repository.getParticipantTotalPointsInEvent(participantId, eventId);
+        return result;
       },
     },
   },
