@@ -47,4 +47,18 @@ module.exports = {
     };
     return result;
   },
+
+  delete: async (id) => {
+    const result = await db.participants.destroy({ where: { id } });
+    return result;
+  },
+
+  isParticipantAlreadyInEvent: async (participantId, eventId) => {
+    const eventPoint = await db.participants_points.findAll({ where: { participantId: participantId, eventId: eventId } });
+    console.log(eventPoint);
+    if (eventPoint.length) {
+      return true;
+    }
+    return false;
+  },
 };
