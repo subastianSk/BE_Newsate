@@ -10,8 +10,8 @@ module.exports = {
         },
         {
           model: db.users,
-          attributes: ["id", "email"]
-        }
+          attributes: ["id", "email"],
+        },
       ],
     });
     return result;
@@ -19,5 +19,27 @@ module.exports = {
   create: async (payload) => {
     const result = await db.events.create(payload);
     return result;
+  },
+  get: async () => {
+    const result = await db.events.findAll({
+      include: [
+        {
+          model: db.users,
+          attributes: ["id", "email"],
+        },
+      ],
+    });
+
+    return result;
+  },
+  delete: async (id) => {
+    const result = await db.events.destroy({ where: { id } });
+    if (result) return true;
+    return false;
+  },
+  edit: async (id, payload) => {
+    const result = await db.events.update(payload, { where: { id } });
+    if (result) return result;
+    return null;
   },
 };
