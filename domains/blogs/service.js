@@ -47,6 +47,8 @@ module.exports = {
             responseMessage: "update success data Blogs",
             method: "put",
             path: "/:id",
+            authentication: true,
+            authorization: ["admin"],
             handler: async (ctx) => {
                 const payload = ctx.payload.body;
                 const newPayload = {
@@ -63,6 +65,8 @@ module.exports = {
             responseMessage: "delete success data Blogs",
             method: "delete",
             path: "/:id",
+            authentication: true,
+            authorization: ["admin"],
              handler: async (ctx) => {
                 if (!ctx.payload?.params?.id) {
                     throw new Error("id not exist")
