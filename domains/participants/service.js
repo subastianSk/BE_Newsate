@@ -27,15 +27,24 @@ module.exports = {
       responseMessage: "success add points to participant",
 
       handler: async (ctx) => {
-        console.log("ini addPoint");
         const participantId = Number(ctx.payload.params.id);
+        const eventId = Number(ctx.payload.body.eventId);
+
+        // check if
+        // console.log(participantId, eventId);
+        // const checkParticipantAlreadyInEvent = await repository.isParticipantAlreadyInEvent(participantId, eventId);
+        // console.log(checkParticipantAlreadyInEvent);
+
+        // if (checkParticipantAlreadyInEvent) {
+        //   throw new Error(`participant ${participantId} already participated in this event`);
+        // }
+
         // check if participantId exist
         const isParticipantIdExist = await repository.getById(participantId);
         if (!isParticipantIdExist) {
           throw new Error(`participant with id ${participantId} doesn't exist`);
         }
 
-        const eventId = Number(ctx.payload.body.eventId);
         // check if eventId exist
         const isEventIdExist = await eventRepository.getById(eventId);
         if (!isEventIdExist) {
@@ -52,7 +61,12 @@ module.exports = {
         };
 
         const result = await repository.createPoints(payload);
-        return result;
+        return {
+          participant: isParticipantIdExist,
+          event: isEventIdExist,
+          point: result.point,
+          weight: result.weight,
+        };
       },
     },
     getPointsByParticipant: {
@@ -87,6 +101,18 @@ module.exports = {
         const eventId = Number(ctx.payload.params.event);
 
         const result = repository.getParticipantTotalPointsInEvent(participantId, eventId);
+        return result;
+      },
+    },
+    deleteById: {
+      method: "delete",
+      path: "/:id",
+      responseMessage: "success delete participant",
+      handler: async (ctx) => {
+        if (!ctx.payload?.params?.id) {
+          throw new Error("id not exist");
+        }
+        const result = await repository.delete(Number(ctx.payload.params.id));
         return result;
       },
     },
