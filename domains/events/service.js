@@ -13,9 +13,9 @@ module.exports = {
     add: {
       method: "post",
       path: "/",
-      // authentication: true,
-      // authorization: ["admin"],
-      // responseMessage: "success create events",
+      authentication: true,
+      authorization: ["admin"],
+      responseMessage: "success create events",
       handler: async (ctx) => {
         const payload = ctx.payload.body;
         const result = await repository.create(payload);
@@ -26,9 +26,9 @@ module.exports = {
       responseMessage: "success delete event",
       method: "delete",
       path: "/:id",
-      // authentication: true,
-      // authorization: ["admin"],
-      // responseMessage: "success create events",
+      authentication: true,
+      authorization: ["admin"],
+      responseMessage: "success create events",
       handler: async (ctx) => {
         const result = await repository.delete(Number(ctx.payload.params.id));
         if(!result){
@@ -41,9 +41,9 @@ module.exports = {
       responseMessage: "success edit event",
       method: "put",
       path: "/:id",
-      // authentication: true,
-      // authorization: ["admin"],
-      // responseMessage: "success create events",
+      authentication: true,
+      authorization: ["admin"],
+      responseMessage: "success create events",
       handler: async (ctx) => {
         const payload = ctx.payload.body;
         const result = await repository.edit(Number(ctx.payload.params.id),payload);
