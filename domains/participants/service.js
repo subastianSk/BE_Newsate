@@ -10,9 +10,10 @@ module.exports = {
       method: "post",
       path: "/",
       authentication: true,
-      authorization: ["admin"],
+      authorization: ["admin", "moderator"],
       responseMessage: "success create participant",
       handler: async (ctx) => {
+        console.log("ini add");
         const payload = ctx.payload.body;
         const result = await repository.create(payload);
         return result;
@@ -20,10 +21,13 @@ module.exports = {
     },
     addPoints: {
       method: "post",
-      path: "/:id",
+      path: "/:id/point",
+      authentication: true,
+      authorization: ["admin", "moderator"],
       responseMessage: "success add points to participant",
 
       handler: async (ctx) => {
+        console.log("ini addPoint");
         const participantId = Number(ctx.payload.params.id);
         // check if participantId exist
         const isParticipantIdExist = await repository.getById(participantId);
@@ -42,12 +46,26 @@ module.exports = {
           participantId: participantId,
           eventId: eventId,
           weight: Number(ctx.payload.body.weight),
-          points: Number(ctx.payload.body.weight) * 10,
-          inputBy: 1,
+          point: Number(ctx.payload.body.weight) * 10,
+          userId: 1,
+          // ctx.user.id
         };
 
         const result = await repository.createPoints(payload);
         return result;
+      },
+    },
+    getById: {
+      responseMessage: "success get data Pet",
+      resultName: "hewanFilter",
+      method: "get",
+      path: "/:id",
+      handler: (ctx) => {
+        const hewan = repositoryHewan.getById(Number(ctx.payload.params.id));
+        if (!hewan) {
+          throw new Error("id not exist");
+        }
+        return [hewan];
       },
     },
   },

@@ -12,6 +12,7 @@ module.exports = {
   },
 
   createPoints: async (payload) => {
+    console.log(payload);
     const result = await db.participants_points.create(payload);
     return result;
   },

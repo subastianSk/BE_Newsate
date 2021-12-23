@@ -1,7 +1,7 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class Role extends Model {
+  class Events extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
       date: {
         type: DataTypes.DATE,
       },
-      createdBy: {
+      userId: {
         type: DataTypes.INTEGER,
         references: {
           model: "users",
@@ -42,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE,
+        type: DataTypes.DATE,
       },
     },
     {
@@ -50,5 +50,5 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "events",
     }
   );
-  return Role;
+  return Events;
 };

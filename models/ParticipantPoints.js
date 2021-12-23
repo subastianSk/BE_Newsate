@@ -1,7 +1,7 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class Role extends Model {
+  class ParticipantPoint extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,22 +11,35 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  Role.init(
+  ParticipantPoint.init(
     {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
+      participantId: {
         type: DataTypes.INTEGER,
+        references: {
+          model: "participants",
+          key: "id",
+        },
+        allowNull: false,
+        foreignKey: true,
       },
-      name: {
-        type: DataTypes.STRING,
+      eventId: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: "events",
+          key: "id",
+        },
+        allowNull: false,
+        foreignKey: true,
+      },
+      weight: {
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
-      date: {
-        type: DataTypes.DATE,
+      point: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
       },
-      createdBy: {
+      userId: {
         type: DataTypes.INTEGER,
         references: {
           model: "users",
@@ -36,18 +49,16 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: true,
       },
       createdAt: {
-        allowNull: false,
         type: DataTypes.DATE,
       },
       updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
+        type: DataTypes.DATE,
       },
     },
     {
       sequelize,
-      modelName: "participantspoints",
+      modelName: "participants_points",
     }
   );
-  return Role;
+  return ParticipantPoint;
 };
