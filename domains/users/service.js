@@ -1,5 +1,5 @@
 const repository = require("./repository");
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const common = require("../../mixins/common");
 const roleRepository = require("../roles/repository");
@@ -35,7 +35,7 @@ module.exports = {
         await result.addRole(roles);
 
         // parse response
-        return {id: result.id, email: result.email, roles};
+        return { id: result.id, email: result.email, roles };
       },
     },
     login: {
@@ -54,15 +54,15 @@ module.exports = {
           sub: result.id,
           iss: "nawaste",
           iat: new Date().getTime() / 1000,
-          exp: (new Date().getTime() / 1000) + 3600 // 1 hour
-        }
-      
+          exp: new Date().getTime() / 1000 + 3600, // 1 hour
+        };
+
         const token = jwt.sign(jwtPayload, process.env.JWT_TOKEN_SECRET);
 
         return {
-          token
+          token,
         };
       },
-    }
+    },
   },
 };

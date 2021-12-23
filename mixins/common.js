@@ -1,5 +1,5 @@
 const Validator = require("fastest-validator");
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 const userRepository = require("../domains/users/repository");
 
 module.exports = {
@@ -27,9 +27,9 @@ module.exports = {
     // authorization roles
     if (ctx.user && Array.isArray(ctx.action.authorization) && ctx.action.authorization.length > 0) {
       const userRoles = ctx.user.roles.map((o) => o.name);
-      const isRoleExist = ctx.action.authorization.filter(value => userRoles.includes(value));
+      const isRoleExist = ctx.action.authorization.filter((value) => userRoles.includes(value));
       if (!isRoleExist.length) {
-        throw new Error('user is not suppose to do this action because the role have no authorization for that');
+        throw new Error("user is not suppose to do this action because the role have no authorization for that");
       }
     }
 
@@ -50,6 +50,7 @@ module.exports = {
     };
   },
   onError: (ctx, err) => {
+    console.error(err);
     let message = err.message;
     try {
       message = JSON.parse(err.message);
