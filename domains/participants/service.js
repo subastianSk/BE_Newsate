@@ -47,7 +47,7 @@ module.exports = {
           eventId: eventId,
           weight: Number(ctx.payload.body.weight),
           point: Number(ctx.payload.body.weight) * 10,
-          userId: 1,
+          userId: ctx.user.id,
           // ctx.user.id
         };
 
