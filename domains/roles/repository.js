@@ -1,5 +1,4 @@
 const db = require("../../models").roles;
-console.log(db.roles)
 
 module.exports = {
   getById: async (id) => {
