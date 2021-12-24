@@ -14,7 +14,7 @@ module.exports = {
       method: "post",
       path: "/",
       authentication: true,
-      authorization: ["admin"],
+      authorization: ["admin","superadmin"],
       responseMessage: "success create users",
       handler: async (ctx) => {
         const payload = {
@@ -70,8 +70,8 @@ module.exports = {
       responseMessage: "success edit user",
       method: "put",
       path: "/:id",
-      // authentication: true,
-      // authorization: ["admin"],
+      authentication: true,
+      authorization: ["admin","superadmin"],
       handler: async (ctx) => {
         let payload = ctx.payload.body;
         if (payload.password) {
@@ -91,8 +91,8 @@ module.exports = {
       responseMessage: "success delete user",
       method: "delete",
       path: "/:id",
-      // authentication: true,
-      // authorization: ["admin"],
+      authentication: true,
+      authorization: ["admin","superadmin"],
       handler: async (ctx) => {
         const result = await repository.delete(Number(ctx.payload.params.id));
         if (!result) {
