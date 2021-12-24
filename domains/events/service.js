@@ -14,11 +14,17 @@ module.exports = {
       method: "post",
       path: "/",
       authentication: true,
-      authorization: ["admin","superadmin"],
+      authorization: ["admin", "superadmin"],
       responseMessage: "success create events",
       handler: async (ctx) => {
+        const user = ctx.user;
+        // user.dataValues.id
         const payload = ctx.payload.body;
-        const result = await repository.create(payload);
+        const newPayload = {
+          ...payload,
+          userId: user.dataValues.id,
+        };
+        const result = await repository.create(newPayload);
         return result;
       },
     },
@@ -27,29 +33,32 @@ module.exports = {
       method: "delete",
       path: "/:id",
       authentication: true,
-      authorization: ["admin","superadmin"],
+      authorization: ["admin", "superadmin"],
       handler: async (ctx) => {
         const result = await repository.delete(Number(ctx.payload.params.id));
-        if(!result){
+        if (!result) {
           throw new Error("id not exist");
         }
         return result;
-      }
+      },
     },
     edit: {
       responseMessage: "success edit event",
       method: "put",
       path: "/:id",
       authentication: true,
-      authorization: ["admin","superadmin"],
+      authorization: ["admin", "superadmin"],
       handler: async (ctx) => {
         const payload = ctx.payload.body;
-        const result = await repository.edit(Number(ctx.payload.params.id),payload);
-        if(result == null){
+        const result = await repository.edit(
+          Number(ctx.payload.params.id),
+          payload
+        );
+        if (result == null) {
           throw new Error("id not exist");
         }
         // return result;
-      }
+      },
     },
     getById: {
       responseMessage: "success get data event",

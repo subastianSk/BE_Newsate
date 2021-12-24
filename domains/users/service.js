@@ -70,15 +70,17 @@ module.exports = {
       responseMessage: "success edit user",
       method: "put",
       path: "/:id",
-      authentication: true,
-      authorization: ["admin","superadmin"],
       handler: async (ctx) => {
         let payload = ctx.payload.body;
+        const user = ctx.user;
         if (payload.password) {
           payload.password = bcrypt.hashSync(ctx.payload.body.password, 8);
         }
+        if(payload.id != user.dataValues.id){
+          throw new Error("Cant edit other people permission")
+        }
         const result = await repository.edit(
-          Number(ctx.payload.params.id),
+          user.dataValues.id,
           payload
         );
         if (result == null) {
