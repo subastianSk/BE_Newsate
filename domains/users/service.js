@@ -26,7 +26,7 @@ module.exports = {
 
         // check if roles exist
         for (const roleId of roleIds) {
-          const role = await roleRepository.getById(roleId);
+          const role = await roleRepository.addUserId(roleId);
           if (!role) {
             throw new Error(`role with id ${roleId} doesn't exist`);
           }

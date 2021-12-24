@@ -1,6 +1,10 @@
 const db = require("../../models").roles;
 
 module.exports = {
+  addUserId: async (id) => {
+    const result = await db.findByPk(id);
+    return result;
+  },
   getById: async (id) => {
     const result = await db.findByPk(id, {
       include: [

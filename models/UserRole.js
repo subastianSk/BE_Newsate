@@ -9,34 +9,36 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      this.hasOne(models.users, {foreignKey: "id"});
+      this.hasOne(models.roles, {foreignKey: "id"});
     }
   }
   UserRole.init(
     {
-    adminId: {
+      adminId: {
         type: DataTypes.INTEGER,
         references: {
-            model: "users",
-            key: "id",
-    },
+          model: "users",
+          key: "id",
+        },
         allowNull: false,
         foreignKey: true,
-    },
-    roleId: {
+      },
+      roleId: {
         type: DataTypes.INTEGER,
         references: {
-            model: "roles",
-            key: "id",
-    },
+          model: "roles",
+          key: "id",
+        },
         allowNull: false,
         foreignKey: true,
-    },
-    createdAt: {
-    type: DataTypes.DATE,
-    },
-    updatedAt: {
-    type: DataTypes.DATE,
-    },
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+      },
     },
     {
       sequelize,
