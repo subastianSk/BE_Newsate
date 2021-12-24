@@ -1,10 +1,13 @@
 require("dotenv").config();
 
 const express = require("express");
-const { sequelize } = require("./models");
+const {
+  sequelize
+} = require("./models");
 
 const participantService = require('./domains/participants').service;
 const userService = require('./domains/users').service;
+const blogsService = require('./domains/blogs').service;
 const eventService = require('./domains/events').service;
 
 const app = express();
@@ -14,6 +17,7 @@ app.use(express.json());
 
 app.use('/participants', participantService);
 app.use('/users', userService);
+app.use('/blog', blogsService);
 app.use('/events', eventService);
 
 // db connect
