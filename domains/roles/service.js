@@ -1,21 +1,17 @@
 const common = require("../../mixins/common");
 const repository = require("./repository");
 
-function compare(a, b) {
-  if (a.point > b.point) return -1;
-  return 0;
-}
 
 module.exports = {
-  name: "events",
+  name: "roles",
   mixins: [common],
   actions: {
     add: {
       method: "post",
       path: "/",
       authentication: true,
-      authorization: ["admin","superadmin"],
-      responseMessage: "success create events",
+      authorization: ["admin"],
+      responseMessage: "success create role",
       handler: async (ctx) => {
         const payload = ctx.payload.body;
         const result = await repository.create(payload);
@@ -23,11 +19,11 @@ module.exports = {
       },
     },
     delete: {
-      responseMessage: "success delete event",
+      responseMessage: "success delete role",
       method: "delete",
       path: "/:id",
       authentication: true,
-      authorization: ["admin","superadmin"],
+      authorization: ["admin"],
       handler: async (ctx) => {
         const result = await repository.delete(Number(ctx.payload.params.id));
         if(!result){
@@ -37,64 +33,53 @@ module.exports = {
       }
     },
     edit: {
-      responseMessage: "success edit event",
+      responseMessage: "success edit role",
       method: "put",
       path: "/:id",
       authentication: true,
-      authorization: ["admin","superadmin"],
+      authorization: ["admin"],
+      responseMessage: "success create role",
       handler: async (ctx) => {
         const payload = ctx.payload.body;
         const result = await repository.edit(Number(ctx.payload.params.id),payload);
         if(result == null){
           throw new Error("id not exist");
         }
-        // return result;
+        return result;
       }
     },
     getById: {
-      responseMessage: "success get data event",
+      responseMessage: "success get data role by id",
       method: "get",
       path: "/:id",
       handler: async (ctx) => {
-        const event = await repository.getById(Number(ctx.payload.params.id));
-        if (!event) {
+        const role = await repository.getById(Number(ctx.payload.params.id));
+        if (!role) {
           throw new Error("id not exist");
         }
 
-        console.log(event);
-
-        const participants = event.participants.map((o) => ({
-          id: o.id,
-          email: o.email,
-          point: o.participants_points.point,
-        }));
-
-        participants.sort(compare);
+        console.log(role);
+        const {id, name} = role
 
         const result = {
-          id: event.id,
-          name: event.name,
-          date: event.date,
-          creted_by: event.user,
-          leaderboard: participants.slice(0, 3),
+          id: id,
+          name: name
         };
 
         return result;
       },
     },
-    getAll: {
-      responseMessage: "success get data event",
+    get: {
+      responseMessage: "success get data roles",
       method: "get",
       path: "/",
       handler: async (ctx) => {
         const payload = ctx.payload.body;
-        const event = await repository.get(payload);
+        const roles = await repository.get(payload);
 
-        const result = event.map((o) => ({
+        const result = roles.map((o) => ({
           id: o.id,
-          name: o.name,
-          date: o.date,
-          created_by: o.user,
+          name: o.name
         }));
 
         return result;
