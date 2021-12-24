@@ -1,5 +1,15 @@
 # Nawaste API Spec
 
+*Noted
+untuk superAdmin kita buat manual di databasenya, jadi pas untuk membuat user diharapkan login terlebih dahulu setelah itu memasukan kode tokennya berikut username dan password superAdminya, seteleah login masukan token authorization lalu pilih Bearer Token
+
+{
+    "email": "superadmin@mail.com",
+    "password": "superadmin"
+}
+
+
+
 ## 1. Users
 
 | Field Name | Type     | Description                                                             |
