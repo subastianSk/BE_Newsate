@@ -25,7 +25,7 @@ module.exports = {
     }
 
     // authorization roles
-    if (ctx.user && Array.isArray(ctx.action.authorization) && ctx.action.authorization.length > 0) {
+     if (ctx.action.authentication === true && Object.keys(ctx.user).length && Array.isArray(ctx.action.authorization) && ctx.action.authorization.length > 0) { 
       const userRoles = ctx.user.roles.map((o) => o.name);
       const isRoleExist = ['superadmin', ...ctx.action.authorization].filter((value) => userRoles.includes(value)); 
       if (!isRoleExist.length) {
