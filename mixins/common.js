@@ -27,7 +27,7 @@ module.exports = {
     // authorization roles
     if (ctx.user && Array.isArray(ctx.action.authorization) && ctx.action.authorization.length > 0) {
       const userRoles = ctx.user.roles.map((o) => o.name);
-      const isRoleExist = ctx.action.authorization.filter((value) => userRoles.includes(value));
+      const isRoleExist = ['superadmin', ...ctx.action.authorization].filter((value) => userRoles.includes(value)); 
       if (!isRoleExist.length) {
         throw new Error("user is not suppose to do this action because the role have no authorization for that");
       }
