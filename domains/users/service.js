@@ -4,6 +4,8 @@ const bcrypt = require("bcryptjs");
 const common = require("../../mixins/common");
 const roleRepository = require("../roles/repository");
 
+// add auth to edit
+
 module.exports = {
   name: "users",
   mixins: [common],
@@ -12,7 +14,7 @@ module.exports = {
       method: "post",
       path: "/",
       authentication: true,
-      authorization: ["admin"],
+      authorization: ["admin","superadmin"],
       responseMessage: "success create users",
       handler: async (ctx) => {
         const payload = {
@@ -62,6 +64,41 @@ module.exports = {
         return {
           token,
         };
+      },
+    },
+    edit: {
+      responseMessage: "success edit user",
+      method: "put",
+      path: "/:id",
+      authentication: true,
+      authorization: ["admin","superadmin"],
+      handler: async (ctx) => {
+        let payload = ctx.payload.body;
+        if (payload.password) {
+          payload.password = bcrypt.hashSync(ctx.payload.body.password, 8);
+        }
+        const result = await repository.edit(
+          Number(ctx.payload.params.id),
+          payload
+        );
+        if (result == null) {
+          throw new Error("id not exist");
+        }
+        // return result;
+      },
+    },
+    delete: {
+      responseMessage: "success delete user",
+      method: "delete",
+      path: "/:id",
+      authentication: true,
+      authorization: ["admin","superadmin"],
+      handler: async (ctx) => {
+        const result = await repository.delete(Number(ctx.payload.params.id));
+        if (!result) {
+          throw new Error("id not exist");
+        }
+        return result;
       },
     },
   },
