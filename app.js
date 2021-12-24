@@ -6,6 +6,7 @@ const { sequelize } = require("./models");
 const participantService = require('./domains/participants').service;
 const userService = require('./domains/users').service;
 const eventService = require('./domains/events').service;
+const roleService = require('./domains/roles').service
 
 const app = express();
 const PORT = Number(process.env.APP_PORT) || 8080;
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use('/participants', participantService);
 app.use('/users', userService);
 app.use('/events', eventService);
+app.use('/role', roleService)
 
 // db connect
 sequelize
