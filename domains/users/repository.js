@@ -40,7 +40,7 @@ module.exports = {
         userId: id,
       },
     });
-    if(event) return "this user manage an event";
+    if (event) return "this user manage an event";
     const deleteRole = await db.users_roles.destroy({
       where: {
         adminId: id,
@@ -49,5 +49,10 @@ module.exports = {
     const result = await db.users.destroy({ where: { id } });
     if (result) return "deleted";
     return false;
+  },
+  get: async () => {
+    const result = await db.users.findAll();
+
+    return result;
   },
 };

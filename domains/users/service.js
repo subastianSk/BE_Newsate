@@ -103,5 +103,23 @@ module.exports = {
         return result;
       },
     },
+    getAll: {
+      responseMessage: "success get data event",
+      method: "get",
+      path: "/",
+      authentication: true,
+      authorization: ["superadmin"],
+      handler: async (ctx) => {
+        const payload = ctx.payload.body;
+        const event = await repository.get(payload);
+
+        const result = event.map((o) => ({
+          id: o.id,
+          email: o.email,
+        }));
+
+        return result;
+      },
+    },
   },
 };
