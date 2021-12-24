@@ -215,11 +215,11 @@ Response :
 
 | Field Name | Type     | Description                                                             |
 | ---------- | -------- | ----------------------------------------------------------------------- |
-| id         | ObjectId | Users Participants ID                                                   |
-| email      | string   | Users Participants Email                                                |
-| name       | string   | Users Participants Name                                                 |
+| id         | ObjectId | Participants ID                                                         |
+| email      | string   | Participants Email                                                      |
+| name       | string   | Participants Name                                                       |
 | eventId    | array    | Event ID                                                                |
-| weight     | array    | Users Roles                                                             |
+| weight     | array    | Users Role                                                             |
 | point      | array    | Users Point                                                             |
 
 
@@ -339,6 +339,131 @@ Response :
       "name": "Event Valentine"
     },
     "point": 25
+  }
+}
+```
+
+## 3. Roles
+
+| Field Name | Type     | Description                                                             |
+| ---------- | -------- | ----------------------------------------------------------------------- |
+| id         | ObjectId | Users ID                                                                |
+| name       | string   | Users Role Name                                                         |
+
+
+### **a. create Roles**
+
+Request :
+
+- Method : POST
+- Endpoint : `/roles`
+- Header :
+  - Content-Type: application/json
+  - Accept: application/json
+
+Body :
+
+```json
+{
+    "name": "superAdmin"
+}
+```
+
+Response :
+
+```json
+{
+  "message": "success create role",
+  "result": {
+    "id": 1,
+    "name": "superAdmin"
+  }
+}
+```
+
+## 4. Events
+
+| Field Name | Type     | Description                                                             |
+| ---------- | -------- | ----------------------------------------------------------------------- |
+| id         | ObjectId | Users ID                                                                |
+| name       | string   | Users Role Name                                                         |
+
+
+### **a. create Events**
+
+Request :
+
+- Method : POST
+- Endpoint : `/events`
+- Header :
+  - Content-Type: application/json
+  - Accept: application/json
+
+Body :
+
+```json
+{
+    "name": "Event Valentine",
+    "date": "14-02-2022"
+}
+```
+
+Response :
+
+```json
+{
+  "message": "success create event",
+  "result": {
+    "id": 1,
+    "name": "Event Valentine",
+    "date": "14-02-2022",
+    "createdBy": {
+      "id": 1,
+      "email": "contohadmin@mail.com"
+    }
+  }
+}
+```
+
+### **d. get Event By ID (also include points)**
+
+Request :
+
+- Method : GET
+- Endpoint : `/events/:eventId`
+- Header :
+  - Accept: application/json
+
+Response :
+
+```json
+{
+  "message": "success get event by id",
+  "result": {
+    "id": 12,
+    "name": "Event Valentine",
+    "date": "14-02-2022",
+    "createdBy": {
+      "id": 1,
+      "email": "contohadmin@mail.com"
+    },
+    "leaderBoard": [
+      {
+        "id": 1,
+        "email": "participant1@gmail.com",
+        "point": 99
+      },
+      {
+        "id": 4,
+        "email": "participant4@gmail.com",
+        "point": 90
+      },
+      {
+        "id": 10,
+        "email": "participant10@gmail.com",
+        "point": 80
+      }
+    ]
   }
 }
 ```
