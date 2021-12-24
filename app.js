@@ -13,7 +13,7 @@ const roleService = require('./domains/roles').service
 const roles = require('./routers/roles')
 
 const app = express();
-const PORT = Number(process.env.APP_PORT) || 8080;
+const PORT = process.env.PORT || Number(process.env.APP_PORT) || 8080;
 
 app.use(express.json());
 
