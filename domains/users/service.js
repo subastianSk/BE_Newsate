@@ -14,7 +14,7 @@ module.exports = {
       method: "post",
       path: "/",
       authentication: true,
-      authorization: ["admin","superadmin"],
+      authorization: ["superadmin"],
       responseMessage: "success create users",
       handler: async (ctx) => {
         const payload = {
@@ -94,7 +94,7 @@ module.exports = {
       method: "delete",
       path: "/:id",
       authentication: true,
-      authorization: ["admin","superadmin"],
+      authorization: ["superadmin"],
       handler: async (ctx) => {
         const result = await repository.delete(Number(ctx.payload.params.id));
         if (!result) {

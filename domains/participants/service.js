@@ -10,7 +10,7 @@ module.exports = {
       method: "post",
       path: "/",
       authentication: true,
-      authorization: ["admin", "moderator"],
+      authorization: ["admin", "moderator", "superadmin"],
       responseMessage: "success create participant",
       handler: async (ctx) => {
         console.log("ini add");
@@ -23,7 +23,7 @@ module.exports = {
       method: "post",
       path: "/:id/point",
       authentication: true,
-      authorization: ["admin", "moderator"],
+      authorization: ["admin", "moderator", "superadmin"],
       responseMessage: "success add points to participant",
 
       handler: async (ctx) => {
