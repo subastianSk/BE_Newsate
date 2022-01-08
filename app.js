@@ -11,11 +11,12 @@ const blogsService = require('./domains/blogs').service;
 const eventService = require('./domains/events').service;
 const roleService = require('./domains/roles').service
 const roles = require('./routers/roles')
-
+const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || Number(process.env.APP_PORT) || 8080;
 
 app.use(express.json());
+app.use(cors())
 
 app.use('/participants', participantService);
 app.use('/users', userService);
